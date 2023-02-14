@@ -1,0 +1,128 @@
+---
+# tasks file for packages
+- name: creating a folder/directory
+  file:
+    name: /home/vm03/myproject
+    state: directory
+    recurse: yes
+  become_user: vm03
+  become: yes
+
+- name: clone git repo
+  git:
+    repo: https://github.com/akshaykumart/Django.git
+    dest: /home/vm03/myproject
+    clone: yes
+    update: yes
+    force: yes
+
+- name: Install Required packages
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - mysql-server
+    - mysql-client
+    - python3-mysqldb
+    - libmysqlclient-dev
+    - python3-virtualenv
+    - python3-dev
+    - default-libmysqlclient-dev
+    - build-essential
+    - nginx
+    - python3
+    - python3-pip
+
+- name: Install additional packages
+  pip:
+    name: "{{item}}"
+    state: present
+
+  loop:
+    - mysqlclient
+    - pymysql
+  become: yes
+
+- name: start and enable mysql service
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: creating mysql user
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "{{db_user}}"
+    password: "{{db_passwd}}"
+    priv: '*.*:SELECT'
+    host: '%'
+    state: present
+
+- name: creating database
+  mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "{{db_name}}"
+    state: present
+
+- name: Create virtualenv for app
+  pip:
+    name: myenv
+    state: latest
+    virtualenv: /home/vm03/myenv
+  become: yes
+
+- name: Copying requirements.txt file
+  template:
+    src: /home/akshay/myproject/ansible/template/requirements.txt
+    dest: /home/vm03/myproject/requirements.txt
+  become_user: vm03
+  become: yes
+
+- name: Install django and gunicorn in virtual env
+  pip:
+    requirements: "/home/vm03/myproject/requirements.txt"
+    virtualenv: "/home/vm03/myenv"
+    virtualenv_command: virtualenv
+
+- name: Creating gunicorn socket file
+  template:
+    src: /home/akshay/myproject/ansible/template/gunicorn.socket
+    dest: /etc/systemd/system/gunicorn.socket
+
+- name: Creating gunicorn service file
+  template:
+    src: /home/akshay/myproject/ansible/template/gunicorn.service
+    dest: /etc/systemd/system/gunicorn.service
+
+- name: Creating nginx config file
+  template:
+    src: /home/akshay/myproject/ansible/template/mysite.conf
+    dest: /etc/nginx/sites-available/mysite.conf
+
+- name: symlink nginx configuration
+  command: ln -s /etc/nginx/sites-available/mysite.conf /etc/nginx/sites-enabled
+
+- name: Removing default nginx config file
+  file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+
+- name: Allow all access to tcp port 80
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+
+- name: start and enable gunicorn socket
+  service:
+    name: gunicorn.socket
+    state: started
+    enabled: yes
+
+- name: start and enable gunicorn service
+  service:
+    name: gunicorn.service
+    state: started
+    enabled: yes
+

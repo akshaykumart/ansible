@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: yes
+
+  roles:
+    - role: '/home/akshay/myproject/ansible/roles/packages'
+      vars:
+        dir: '/home/akshay/myproject/ansible/roles/packages/vars'
+  
+
+    

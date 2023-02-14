@@ -1,0 +1,11 @@
+---
+# handlers file for packages
+- name: Restart mysql
+  service:
+    name: mysql
+    state: restarted
+
+- name: Restart nginx service
+  service:
+    name: nginx
+    state: restarted
