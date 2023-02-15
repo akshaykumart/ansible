@@ -1,5 +1,5 @@
 ---
 # vars file for packages
-db_name: student_details
-db_user: akshay
-db_passwd: Akshay@456
+db_name: <your_db>
+db_user: <username>
+db_passwd: <your_password>
