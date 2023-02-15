@@ -42,19 +42,18 @@ step05: Create a project directory in master:
 step06: Create ansible playbook in master:
         $ cd ansible/<project_dir>
         $ sudo nano main.yml
-         paste the main.yml content present in the source : https://github.com/akshaykumart/ansible/new/master
-
+         paste the main.yml content present in the source : https://github.com/akshaykumart/ansible
 step07: Create ansible roles in master:
         $ cd ansible/<project_dir>
         $ sudo ansible-galaxy init <role_name> 
         $ sudo nano /role_name/tasks/main.yml
-          paste the tasks content present in the source : https://github.com/akshaykumart/ansible/new/master
+          paste the tasks content present in the source : https://github.com/akshaykumart/ansible
           save and exit
         $ sudo nano /role_name/handlers/main.yml
-          paste the handlers content present in the source : https://github.com/akshaykumart/ansible/new/master
+          paste the handlers content present in the source : https://github.com/akshaykumart/ansible
           save and exit
         $ sudo nano /role_name/vars/main.yml
-          paste the vars content present in the source : https://github.com/akshaykumart/ansible/new/master
+          paste the vars content present in the source : https://github.com/akshaykumart/ansible
           save and exit
 
 step08: Run the playbook:
