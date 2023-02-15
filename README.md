@@ -3,16 +3,19 @@ configuration management using ansible
 This page will include the steps to automate the installations of required packages and deploying django application into a remote machine
 
 step01: Create a virtual machine (remote/guest) of your choice and install ansible into it:
+
         $ sudo apt update
         $ sudo apt add-repository ppa:ansible/ansible
         $ sudo apt install ansible -y
         
 step02: Install ansible in host/ master machine:
+
         $ sudo apt update
         $ sudo apt add-repository ppa:ansible/ansible
         $ sudo apt install ansible -y
    
 step03: SSH passwordless authentication between Master and Slave (host and guest machines):
+
         In master:
         $ ssh-keygen       //keep on pressing ENTER until the command terminates
         $ cd .ssh
@@ -26,6 +29,7 @@ step03: SSH passwordless authentication between Master and Slave (host and guest
         Validate by connecting slave from master: ssh user@slave_ip_address
 
 step04: Create a Inventory file:
+
         In master:
         $ cd /etc/ansible/hosts
         add the ip address/hostname/domainname of slave in master
@@ -37,13 +41,17 @@ step04: Create a Inventory file:
                    $ ansible -m ping all               //returns pong
                    
 step05: Create a project directory in master:
+
         $ mkdir <project_dir>
 
 step06: Create ansible playbook in master:
+
         $ cd <project_dir>/ansible
         $ sudo nano main.yml
          paste the main.yml content present in the source : https://github.com/akshaykumart/ansible
+         
 step07: Create ansible roles in master:
+
         $ cd <project_dir>/ansible
         $ sudo ansible-galaxy init <role_name> 
         $ sudo nano /role_name/tasks/main.yml
@@ -57,6 +65,7 @@ step07: Create ansible roles in master:
           save and exit
 
 step08: Run the playbook:
+
         $ cd <project_dir>/ansible
         $ ansible-playbook /etc/ansible/hosts main.yml
        
