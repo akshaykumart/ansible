@@ -40,11 +40,11 @@ step05: Create a project directory in master:
         $ mkdir <project_dir>
 
 step06: Create ansible playbook in master:
-        $ cd ansible/<project_dir>
+        $ cd <project_dir>/ansible
         $ sudo nano main.yml
          paste the main.yml content present in the source : https://github.com/akshaykumart/ansible
 step07: Create ansible roles in master:
-        $ cd ansible/<project_dir>
+        $ cd <project_dir>/ansible
         $ sudo ansible-galaxy init <role_name> 
         $ sudo nano /role_name/tasks/main.yml
           paste the tasks content present in the source : https://github.com/akshaykumart/ansible
@@ -57,7 +57,7 @@ step07: Create ansible roles in master:
           save and exit
 
 step08: Run the playbook:
-        $ cd ansible/<project_dir>
+        $ cd <project_dir>/ansible
         $ ansible-playbook /etc/ansible/hosts main.yml
        
 step09: Validate everything in slave machine
