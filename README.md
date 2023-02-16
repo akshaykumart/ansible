@@ -1,6 +1,13 @@
-# ansible
-configuration management using ansible
+# Ansible
+
+Configuration management using ansible.
+
 This page will include the steps to automate the installations of required packages and deploying django application into a remote machine
+
+Refer https://github.com/akshaykumart/Django.git for souce code for django application
+Refer https://github.com/akshaykumart/gunicorn.git for configuration files for deploying django on to production server
+
+Steps to automate configuration management using Ansible:
 
 step01: Create a virtual machine (remote/guest) of your choice and install ansible into it:
 
@@ -48,26 +55,33 @@ step06: Create ansible playbook in master:
 
         $ cd <project_dir>/ansible
         $ sudo nano main.yml
-         paste the main.yml content present in the source : https://github.com/akshaykumart/ansible
+         paste the main.yml content present in the source : https://github.com/akshaykumart/ansible.git
          
 step07: Create ansible roles in master:
 
         $ cd <project_dir>/ansible
         $ sudo ansible-galaxy init <role_name> 
         $ sudo nano /role_name/tasks/main.yml
-          paste the tasks content present in the source : https://github.com/akshaykumart/ansible
+          paste the tasks content present in the source : https://github.com/akshaykumart/ansible.git
           save and exit
         $ sudo nano /role_name/handlers/main.yml
-          paste the handlers content present in the source : https://github.com/akshaykumart/ansible
+          paste the handlers content present in the source : https://github.com/akshaykumart/ansible.git
           save and exit
         $ sudo nano /role_name/vars/main.yml
-          paste the vars content present in the source : https://github.com/akshaykumart/ansible
+          paste the vars content present in the source : https://github.com/akshaykumart/ansible.git
+          NOTE: Modify database name,user,password according to your db deatils
           save and exit
 
 step08: Run the playbook:
 
         $ cd <project_dir>/ansible
         $ ansible-playbook /etc/ansible/hosts main.yml
+          
+          Enter your database details
+          Enter your DB name:
+          Enter your DB user:
+          Enter your DB password:
+          confirm Enter your DB password:
        
 step09: Validate everything in slave machine
 
