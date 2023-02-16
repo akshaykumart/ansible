@@ -1,11 +1,25 @@
 ---
 - hosts: all
   become: yes
+  vars_prompt:
+    - name: database
+      prompt: "Enter your DB name"
+      private: no
+
+    - name: db_user
+      prompt: "Enter your DB user"
+      private: no
+    
+    - name: db_password
+      prompt: "Enter your DB password"
+      private: yes
+      encrypt: sha512_crypt
+      confirm: yes
+      salt_size: 7
 
   roles:
     - role: '/home/akshay/myproject/ansible/roles/packages'
-      vars:
-        dir: '/home/akshay/myproject/ansible/roles/packages/vars'
+      
   
 
     
