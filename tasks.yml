@@ -50,23 +50,13 @@
     state: started
     enabled: yes
 
-- name: change authentication plugin 
-  mysql_user:
-    login_host: 'localhost'
-    login_user: 'root'
-    login_password: ''
-    name: root
-    plugin: mysql_native_password
-    state: present
  
 - name: Set MySQL root password
   mysql_user:
-    login_host: 'localhost'
-    login_user: 'root'
-    login_password: ''
-    name: 'root'
+    login_password: "{{ root_pass }}"
+    name: root
     password: '{{ root_pass }}'
-    state: present
+    check_implicit_admin: true
 
 - name: creating mysql user
   mysql_user:
@@ -97,7 +87,7 @@
   template:
     src: /home/akshay/myproject/ansible/template/requirements.txt
     dest: /home/testserver/myproject/requirements.txt
-  become_user: vm03
+  become_user: testserver
   become: yes
 
 - name: Install django and gunicorn in virtual env
