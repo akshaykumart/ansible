@@ -112,7 +112,7 @@
     dest: /etc/nginx/sites-available/mysite.conf
 
 - name: symlink nginx configuration
-  command: ln -s /etc/nginx/sites-available/mysite.conf /etc/nginx/sites-enabled
+  command: ln -sf /etc/nginx/sites-available/mysite.conf /etc/nginx/sites-enabled
 
 - name: Removing default nginx config file
   file:
