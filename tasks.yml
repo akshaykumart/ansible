@@ -2,16 +2,16 @@
 # tasks file for packages
 - name: creating a folder/directory
   file:
-    name: /home/vm03/myproject
+    name: /home/testserver/myproject
     state: directory
     recurse: yes
-  become_user: vm03
+  become_user: testserver
   become: yes
 
 - name: clone git repo
   git:
     repo: https://github.com/akshaykumart/Django.git
-    dest: /home/vm03/myproject
+    dest: /home/testserver/myproject
     clone: yes
     update: yes
     force: yes
@@ -90,20 +90,20 @@
   pip:
     name: myenv
     state: latest
-    virtualenv: /home/vm03/myenv
+    virtualenv: /home/testserver/myenv
   become: yes
 
 - name: Copying requirements.txt file
   template:
     src: /home/akshay/myproject/ansible/template/requirements.txt
-    dest: /home/vm03/myproject/requirements.txt
+    dest: /home/testserver/myproject/requirements.txt
   become_user: vm03
   become: yes
 
 - name: Install django and gunicorn in virtual env
   pip:
-    requirements: "/home/vm03/myproject/requirements.txt"
-    virtualenv: "/home/vm03/myenv"
+    requirements: "/home/testserver/myproject/requirements.txt"
+    virtualenv: "/home/testserver/myenv"
     virtualenv_command: virtualenv
 
 - name: Creating gunicorn socket file
