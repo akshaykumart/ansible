@@ -9,3 +9,13 @@
   service:
     name: nginx
     state: restarted
+  
+- name: Restart gunicorn.socket
+  service:
+    name: gunicorn.socket
+    state: restarted
+
+- name: Restart gunicorn.service
+  service:
+    name: gunicorn.service
+    state: restarted
