@@ -50,20 +50,41 @@
     state: started
     enabled: yes
 
+- name: change authentication plugin 
+  mysql_user:
+    login_host: 'localhost'
+    login_user: 'root'
+    login_password: ''
+    name: root
+    plugin: mysql_native_password
+    state: present
+ 
+- name: Set MySQL root password
+  mysql_user:
+    login_host: 'localhost'
+    login_user: 'root'
+    login_password: ''
+    name: 'root'
+    password: '{{ root_pass }}'
+    state: present
+
 - name: creating mysql user
   mysql_user:
-    login_unix_socket: /var/run/mysqld/mysqld.sock
+    login_user: 'root'
+    login_password: "{{ root_pass }}"
     name: "{{db_user}}"
-    password: "{{db_passwd}}"
-    priv: '*.*:SELECT'
+    password: "{{db_pass}}"
+    priv: '*.*:ALL'
     host: '%'
     state: present
 
-- name: creating database
+- name: creating details db
   mysql_db:
-    login_unix_socket: /var/run/mysqld/mysqld.sock
     name: "{{db_name}}"
     state: present
+    login_user: root
+    login_password: "{{root_pass}}"
+  register: db_created
 
 - name: Create virtualenv for app
   pip:
@@ -125,4 +146,13 @@
     name: gunicorn.service
     state: started
     enabled: yes
+    
+- name: makemigrations
+  shell: |
+    /home/testserver/myenv/bin/python /home/testserver/myproject/manage.py makemigrations
+
+- name: migrate
+  shell: |
+    /home/testserver/myenv/bin/python /home/testserver/myproject/manage.py migrate
+
 
