@@ -160,9 +160,13 @@
 - name: makemigrations
   shell: |
     /home/testserver/myenv/bin/python /home/testserver/myproject/manage.py makemigrations
+  args:
+    chdir: /home/testserver/myproject/mysite
 
 - name: migrate
   shell: |
     /home/testserver/myenv/bin/python /home/testserver/myproject/manage.py migrate
+  args:
+    chdir: /home/testserver/myproject/mysite
 
 
