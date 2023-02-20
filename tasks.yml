@@ -53,10 +53,21 @@
  
 - name: Set MySQL root password
   mysql_user:
+    login_user: 'root'
+    login_password: ''
+    name: root
+    password: "{{ root_pass }}"
+    update_password: always
+
+- name: change authentication plugin
+  mysql_user:
+    login_host: 'localhost'
+    login_user: 'root'
     login_password: "{{ root_pass }}"
     name: root
-    password: '{{ root_pass }}'
-    check_implicit_admin: true
+    plugin: mysql_native_password
+    state: present
+
 
 - name: creating mysql user
   mysql_user:
@@ -68,13 +79,16 @@
     host: '%'
     state: present
 
-- name: creating details db
+- name: creating database
   mysql_db:
     name: "{{db_name}}"
     state: present
     login_user: root
     login_password: "{{root_pass}}"
   register: db_created
+  
+- name: Flush Privileges
+  shell: mysql -u root -e 'FLUSH PRIVILEGES'
 
 - name: Create virtualenv for app
   pip:
@@ -88,6 +102,12 @@
     src: /home/akshay/myproject/ansible/template/requirements.txt
     dest: /home/testserver/myproject/requirements.txt
   become_user: testserver
+  become: yes
+ 
+ - name: Copying settings.py file
+  template:
+    src: /home/akshay/myproject/ansible/template/settings.py
+    dest: /home/testserver/myproject/mysite/settings.py
   become: yes
 
 - name: Install django and gunicorn in virtual env
