@@ -162,5 +162,27 @@
     /home/testserver/myenv/bin/python /home/testserver/myproject/manage.py migrate
   args:
     chdir: /home/testserver/myproject/mysite
+  
+- name: Copying startup script file
+  template:
+    src: /home/akshay/myproject/ansible/template/startup.sh
+    dest: /usr/sbin/startup.sh
+  become: yes
+
+- name: Copying startup service file
+  template:
+    src: /home/akshay/myproject/ansible/template/startup.service
+    dest: /etc/systemd/system/startup.service
+  become: yes
+
+- name: reload configuration
+  systemd:
+    daemon_reload: yes
+
+- name: start and enable startup service
+  service:
+    name: startup.service
+    state: started
+    enabled: yes
 
 
