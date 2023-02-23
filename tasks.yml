@@ -50,21 +50,28 @@
     state: started
     enabled: yes
 
-- name: Change the authentication plugin of MySQL root user to mysql_native_password
-  shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password"
-    WHERE user="root" AND host="localhost"'
-
-- name: Flush Privileges
-  shell: mysql -u root -e 'FLUSH PRIVILEGES'
-
 - name: Set MySQL root password
   mysql_user:
-    login_host: 'localhost'
-    login_user: 'root'
-    login_password: ''
-    name: 'root'
+    name: root
+    host: localhost
     password: "{{ root_pass }}"
+    check_implicit_admin: yes
+    login_user: root
+    update_password: always
     state: present
+  become: yes
+  when: root_pass == ""
+
+- name: change authentication plugin 
+  mysql_user:
+    login_host: localhost
+    login_user: root
+    login_password: "{{ root_pass }}"
+    name: root
+    plugin: mysql_native_password
+    state: present
+  become: yes
+
 
 - name: creating mysql user
   mysql_user:
@@ -75,6 +82,7 @@
     priv: '*.*:ALL'
     host: '%'
     state: present
+  become: yes
 
 - name: creating database
   mysql_db:
@@ -83,6 +91,7 @@
     login_user: root
     login_password: "{{root_pass}}"
   register: db_created
+  become: yes
 
 - name: Create virtualenv for app
   pip:
